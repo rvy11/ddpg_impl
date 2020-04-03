@@ -60,7 +60,6 @@ def render(env, policy=None):
         env.render()
 
         if done:
-            print("hit done")
             break
 
     env.close()
@@ -288,12 +287,16 @@ if __name__ == "__main__":
         assert all(isinstance(value, Actor) for value in saved_policies.values())
 
         # Save actor and critic models
+        if not os.path.exists('saved_models'):
+            os.makedirs('saved_models')
         checkpoint_critic = {key: critic.custom_dump() for key, critic in saved_models.items()}
         torch.save(checkpoint_critic, 'saved_models/checkpoint_critic_%s_%s_noise_%s.pt' % (params['env'], params['policy'], params['action_noise']))
         checkpoint_actor = {key: actor.custom_dump() for key, actor in saved_policies.items()}
         torch.save(checkpoint_actor, 'saved_models/checkpoint_actor_%s_%s_noise_%s.pt' % (params['env'], params['policy'], params['action_noise']))
 
         # Save plots of performance metrics
+        if not os.path.exists('plots'):
+            os.makedirs('plots')
         plt.rcParams['figure.figsize'] = [20, 6]
         num_episodes = len(returns)
         num_loss_calc = len(losses)
