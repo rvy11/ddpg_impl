@@ -1,0 +1,16 @@
+{
+    "policy":"DDPG",
+    "env":"ant",
+    "seed":0,
+    "start_timesteps":1e4,
+    "eval_freq":5e3,
+    "max_timesteps":1000000,
+    "expl_noise":0.1,
+    "replay_size":1000,
+    "batch_size":256,
+    "tau":0.005,
+    "policy_noise":2,
+    "action_noise":"Normal",
+    "min_action":-1.0,
+    "max_action":1.0
+}
