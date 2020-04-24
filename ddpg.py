@@ -23,7 +23,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 envs = {
     'ant': gym.make('Ant-v2'),
-    'dkitty': gym.make('DKittyWalkFixed-v0')
+    'dkitty': gym.make('DKittyWalkFixed-v0'),
+    'dkittyrand': gym.make('DKittyWalkRandomDynamics-v0')
 }
 
 default_params = {
@@ -50,17 +51,31 @@ def render(env, policy=None):
         def policy(state):
             return env.action_space.sample()
 
+    overall_counter = 0
+    dist_to_goal = []
     state = env.reset()
+    dist_to_goal.append(state[-1])
     env.render()
 
     while True:
         action = policy(torch.FloatTensor(state)).cpu().data.numpy()
-        print(action)
         state, _, done, _ = env.step(action)
+        dist_to_goal.append(state[-1])
         env.render()
-
-        if done:
-            break
+        print(overall_counter)
+        overall_counter += 1
+        if overall_counter == 500:
+            # Save plots of performance metrics
+            if not os.path.exists('plots'):
+                os.makedirs('plots')
+            plt.plot(range(len(dist_to_goal)), dist_to_goal, 'r')
+            plt.ylabel('Distance to Goal Location')
+            plt.xlabel('Timestep')
+            plt.title('Distance to Goal Location for DDPG-Trained Policy (Random Env -> Random Env)')
+            plt.savefig('plots/dist_to_goal_rl_rand_2_rand.png')
+            break;
+        # if done:
+        #     break
 
     env.close()
 
