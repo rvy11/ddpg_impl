@@ -10,7 +10,9 @@ Additional packages needed (for Ubuntu 18.04 LTS): patchelf, libosmesa6-dev
 
 We also discovered that we had to modify the LD_PRELOAD environment variable to allow MuJoCo to find the OpenGL Extension Wrangler library
 
+```
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libGLEW.so.2.0
+```
 
 ### Run the program
 
@@ -46,7 +48,7 @@ $ python ./ddpg.py -r saved_models/checkpoint_actor_dkitty_DDPG_noise_Normal_ran
 $ cat test.json 
 {
     "policy":"DDPG",
-    "env":"ant",
+    "env":"dkitty",
     "seed":0,
     "start_timesteps":1e4,
     "eval_freq":5e3,
